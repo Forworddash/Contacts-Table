@@ -1,30 +1,25 @@
 {
-  "name": "material-react-table-example-basic",
-  "version": "0.0.0",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "dev": "vite --port 3001",
-    "build": "vite build",
-    "serve": "vite preview",
-    "start": "vite"
-  },
-  "dependencies": {
-    "@emotion/react": "^11.13.3",
-    "@emotion/styled": "^11.13.0",
-    "@mui/icons-material": "^6.1.0",
-    "@mui/material": "^6.1.0",
-    "@mui/x-date-pickers": "^7.16.0",
-    "dayjs": "^1.11.13",
-    "material-react-table": "^3.0.1",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
-  },
-  "devDependencies": {
-    "@types/react": "^18.3.5",
-    "@types/react-dom": "^18.3.0",
-    "@vitejs/plugin-react": "^4.3.1",
-    "typescript": "^5.6.2",
-    "vite": "^5.4.4"
+    "name": "tanstack-table-example-basic",
+    "version": "0.0.0",
+    "private": true,
+    "scripts": {
+      "dev": "vite",
+      "build": "vite build",
+      "serve": "vite preview",
+      "start": "vite"
+    },
+    "dependencies": {
+      "@tanstack/react-table": "^8.20.5",
+      "react": "^18.3.1",
+      "react-dom": "^18.3.1"
+    },
+    "devDependencies": {
+      "@rollup/plugin-replace": "^5.0.7",
+      "@types/react": "^18.3.3",
+      "@types/react-dom": "^18.3.0",
+      "@vitejs/plugin-react": "^4.3.1",
+      "typescript": "5.4.5",
+      "vite": "^5.3.2"
+    }
   }
-}
+  
