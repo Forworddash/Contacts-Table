@@ -162,10 +162,33 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import './index.css';
+import {
+  createColumnHelper,
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
+
+type Contact = {
+  isActive: boolean;
+  picture: string;
+  age: number;
+  eyeColor: string;
+  name: string;
+  gender: string;
+  company: string;
+  email: string;
+  phone: string;
+  address: string;
+  about: string;
+  last_contact_date: string;
+};
+
 
 // Initialize the QueryClient for TanStack Query
 const queryClient = new QueryClient();
 
+// Fetch contacts from API
 const fetchContacts = async () => {
   const response = await fetch('/contacts');
   if (!response.ok) {
@@ -174,23 +197,105 @@ const fetchContacts = async () => {
   return response.json();
 };
 
+// Define column helper
+const columnHelper = createColumnHelper<Contact>();
+
+// Define columns
+const columns = [
+  columnHelper.accessor('isActive', {
+    header: 'Active',
+    // footer: info => info.column.id,
+  }),
+  columnHelper.accessor('picture', {
+    header: 'Picture',
+    // footer: info => info.column.id,
+  }),
+  columnHelper.accessor('age', {
+    header: 'Age',
+    // footer: info => info.column.id,
+  }),
+  columnHelper.accessor('eyeColor', {
+    header: 'Eye Color',
+    // footer: info => info.column.id,
+  }),
+  columnHelper.accessor('name', {
+    header: 'Name',
+    // footer: info => info.column.id,
+  }),
+  columnHelper.accessor('gender', {
+    header: 'Gender',
+    // footer: info => info.column.id,
+  }),
+  columnHelper.accessor('company', {
+    header: 'Company',
+    // footer: info => info.column.id,
+  }),
+  columnHelper.accessor('email', {
+    header: 'Email',
+    // footer: info => info.column.id,
+  }),
+  columnHelper.accessor('phone', {
+    header: 'Phone',
+    // footer: info => info.column.id,
+  }),
+  columnHelper.accessor('address', {
+    header: 'Address',
+    // footer: info => info.column.id,
+  }),
+  columnHelper.accessor('about', {
+    header: 'About',
+    // footer: info => info.column.id,
+  }),
+  columnHelper.accessor('last_contact_date', {
+    header: 'Last Contact Date',
+    // footer: info => info.column.id,
+  }),
+];
+
+
 function App() {
   const { data, error, isLoading } = useQuery({
     queryKey: ['contacts'],
     queryFn: fetchContacts,
   });
 
+  const table = useReactTable({
+    data: data || [],
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  });
+
   if (isLoading) return <div>Loading...</div>;
   if (error instanceof Error) return <div>Error: {error.message}</div>;
+
 
   return (
     <div>
       <h1>Contacts</h1>
-      <ul>
-        {data && data.map((contact: any) => (
-          <li key={contact.email}>{contact.name} - {contact.email}</li>
-        ))}
-      </ul>
+      <table>
+        <thead>
+          {table.getHeaderGroups().map(headerGroup => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map(header => (
+                <th key={header.id}>
+                  {flexRender(header.column.columnDef.header, header.getContext())}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody>
+          {table.getRowModel().rows.map(row => (
+            <tr key={row.id}>
+              {row.getVisibleCells().map(cell => (
+                <td key={cell.id}>
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
