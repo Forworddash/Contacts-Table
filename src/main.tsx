@@ -24,7 +24,8 @@ type Contact = {
 
 // Fetch contacts from API
 const fetchContacts = async () => {
-  const response = await fetch('http://localhost:3000/contacts'); // Full API URL
+  // const response = await fetch('http://localhost:3000/contacts'); // Full API URL
+  const response = await fetch('/contacts'); // Relative URL
   if (!response.ok) {
     throw new Error('Failed to fetch contacts');
   }

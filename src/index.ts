@@ -1,16 +1,12 @@
 import express, { Request, Response } from 'express';
 import { promises as fs } from 'fs';
 import path from 'path';
+import cors from 'cors';
 
 const app = express();
 const port = 3000;
 
-// CORS middleware to allow requests from any origin
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*'); // Allow all origins for development
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-    next();
-  });
+app.use(cors()); // For all origins
 
 // Function to load contacts from the JSON file
 const loadContacts = async () => {
@@ -22,6 +18,7 @@ const loadContacts = async () => {
     return [];
   }
 };
+
 
 // Route to get all contacts
 app.get('/contacts', async (req: Request, res: Response) => {

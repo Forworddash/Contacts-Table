@@ -1,8 +1,7 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import rollupReplace from '@rollup/plugin-replace'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import rollupReplace from '@rollup/plugin-replace';
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     rollupReplace({
@@ -14,4 +13,9 @@ export default defineConfig({
     }),
     react(),
   ],
-})
+  server: {
+    proxy: {
+      '/contacts': 'http://localhost:3000', // Proxy API requests to backend
+    },
+  },
+});
