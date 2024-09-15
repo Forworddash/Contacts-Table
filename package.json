@@ -3,23 +3,26 @@
     "version": "0.0.0",
     "private": true,
     "scripts": {
-      "dev": "vite",
-      "build": "vite build",
-      "serve": "vite preview",
-      "start": "vite"
+        "dev": "vite",
+        "build": "vite build",
+        "serve": "vite preview",
+        "start": "vite"
     },
     "dependencies": {
-      "@tanstack/react-table": "^8.20.5",
-      "react": "^18.3.1",
-      "react-dom": "^18.3.1"
+        "@tanstack/react-query": "^5.56.2",
+        "@tanstack/react-table": "^8.20.5",
+        "@types/express": "^4.17.21",
+        "express": "^4.21.0",
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1",
+        "ts-node": "^10.9.2"
     },
     "devDependencies": {
-      "@rollup/plugin-replace": "^5.0.7",
-      "@types/react": "^18.3.3",
-      "@types/react-dom": "^18.3.0",
-      "@vitejs/plugin-react": "^4.3.1",
-      "typescript": "5.4.5",
-      "vite": "^5.3.2"
+        "@rollup/plugin-replace": "^5.0.7",
+        "@types/react": "^18.3.3",
+        "@types/react-dom": "^18.3.0",
+        "@vitejs/plugin-react": "^4.3.1",
+        "typescript": "5.4.5",
+        "vite": "^5.3.2"
     }
-  }
-  
+}
