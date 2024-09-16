@@ -2,78 +2,110 @@ import React from 'react'
 import { useParams } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import Contact from '../App';
+import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+
 
 // Define a type for Contact
-// type Contact = {
-//   isActive: boolean;
-//   picture: string;
-//   age: number;
-//   eyeColor: string;
-//   name: string;
-//   gender: string;
-//   company: string;
-//   email: string;
-//   phone: string;
-//   address: string;
-//   about: string;
-//   last_contact_date: string;
-// };
+type Contact = {
+  isActive: boolean;
+  picture: string;
+  age: number;
+  eyeColor: string;
+  name: string;
+  gender: string;
+  company: string;
+  email: string;
+  phone: string;
+  address: string;
+  about: string;
+  last_contact_date: string;
+};
 
 const fetchContactByName = async (name: string) => {
-  const response = await fetch(`/contacts/${name}`);
+  const encodedName = encodeURIComponent(name);
+  const response = await fetch(`/contacts/${encodedName}`);
   if (!response.ok) {
     throw new Error('Failed to fetch contact');
   }
   return response.json();
 }
 
-const FocusPage = () => {
+const columnHelper = createColumnHelper<Contact>();
+
+// Define columns
+const columns = [
+  columnHelper.accessor('name', {header: 'Name'}),
+  columnHelper.accessor('email', {header: 'Email'}),
+  columnHelper.accessor('phone', {header: 'Phone'}),
+  columnHelper.accessor('address', {header: 'Address'}),
+  columnHelper.accessor('company', {header: 'Company'}),
+  columnHelper.accessor('about', {header: 'About'}),
+  columnHelper.accessor('picture', { header: 'Picture', cell: info => <img src={info.getValue()} alt="Contact" style={{ width: '100px' }} />}),
+  columnHelper.accessor('gender', {header: 'Gender'}),
+  columnHelper.accessor('eyeColor', {header: 'Eye Color'}),
+  columnHelper.accessor('age', {header: 'Age'}),
+  columnHelper.accessor('isActive', {header: 'Active', cell: info => info.getValue() ? 'Yes' : 'No'}),
+  columnHelper.accessor('last_contact_date', {header: 'Last Contact Date'}),
+];
+
+const FocusPage: React.FC = () => {
   console.log('FocusPage');
-  // const { name } = useParams();
   // const { data: contact, error, isLoading } = useQuery(['contact', name], () => fetchContactByName(name));
   const { name } = useParams({ strict: false });
+  // const { name } = useParams({ from: '/contacts/${name}' });
   
   const { data: contact, error, isLoading } = useQuery({
     queryKey: ['contact', name],
-    queryFn: () => fetchContactByName(name),
+    queryFn: () => fetchContactByName(name || ''),
+    enabled: !!name,
   })
+
+  console.log('fetched contact', contact);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: Failed to fetch contact</div>;
   
+  // Create table instance
+  const table = useReactTable({
+    data: contact ? [contact] : [], // Wrap contact in array for single row
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  });
 
   return (
     <div>
-      <h1>Contact Details for {contact.name}</h1>
-      <p><strong>Email:</strong> {contact.email}</p>
-      <p><strong>Phone:</strong> {contact.phone}</p>
-      <p><strong>Address:</strong> {contact.address}</p>
-      <p><strong>Company:</strong> {contact.company}</p>
-      <p><strong>About:</strong> {contact.about}</p>
-      <p><strong>Picture:</strong> {contact.picture}</p>
-      <p><strong>Gender:</strong> {contact.gender}</p>
-      <p><strong>Eye Color:</strong> {contact.eyeColor}</p>
-      <p><strong>Age:</strong> {contact.age}</p>
-      <p><strong>Active:</strong> {contact.isActive}</p>
-      <p><strong>Last Contact Date:</strong> {contact.last_contact_date}</p>
-      {/* Add more fields as necessary */}
+      <h1>Contact Details</h1>
+      {contact ? (
+        <table>
+          <thead>
+            {table.getHeaderGroups().map(headerGroup => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map(header => (
+                  <th key={header.id}>
+                    {flexRender(header.column.columnDef.header, header.getContext())}
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody>
+            {table.getRowModel().rows.map(row => (
+              <tr key={row.id}>
+                {row.getVisibleCells().map(cell => (
+                  <td key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <div>No contact found</div>
+      )}
     </div>
   );
 }
 
-// The FocusPage component
-// const FocusPage: React.FC<{ contact: Contact }> = ({ contact }) => {
-//   return (
-//     <div className="p-4">
-//       <h2>Contact Details</h2>
-//       <ul>
-//         <li><strong>Name:</strong> {contact.name}</li>
-//         <li><strong>Email:</strong> {contact.email}</li>
-//         <li><strong>Phone:</strong> {contact.phone}</li>
-//         <li><strong>Address:</strong> {contact.address}</li>
-//       </ul>
-//     </div>
-//   )
-// }
 
 export default FocusPage;

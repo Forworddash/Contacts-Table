@@ -8,15 +8,18 @@ const rootRoute = createRootRoute({
 });
 
 // Define the contact route
-const contactRoute = createRoute({
+const contactDetailRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/contact/:name',
+  path: '/contacts/:name',
   component: FocusPage,
 });
 
+
 // Create the router instance
 const router = createRouter({
-  routeTree: rootRoute.addChildren([contactRoute]),
+  routeTree: rootRoute.addChildren([contactDetailRoute]),
 });
+
+console.log('router', router);
 
 export default router;

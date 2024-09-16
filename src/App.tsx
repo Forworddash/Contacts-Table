@@ -2,7 +2,6 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { Link } from '@tanstack/react-router';
-import { Outlet } from '@tanstack/react-router';
 
 // Define your Contact type and other constants
 type Contact = {
@@ -34,62 +33,11 @@ const fetchContacts = async () => {
   
   // Define columns
   const columns = [
-    // columnHelper.accessor('isActive', {
-    //   header: 'Active',
-    //   // footer: info => info.column.id,
-    // }),
-    columnHelper.accessor('name', {
-      header: 'Name',
-      // footer: info => info.column.id,
-    }),
-    columnHelper.accessor('phone', {
-      header: 'Phone',
-      // footer: info => info.column.id,
-    }),
-    columnHelper.accessor('age', {
-      header: 'Age',
-      // footer: info => info.column.id,
-    }),
-    columnHelper.accessor('email', {
-      header: 'Email',
-      // footer: info => info.column.id,
-    }),
-    columnHelper.accessor('picture', {
-      header: 'Picture',
-      // footer: info => info.column.id,
-    }),
-    // columnHelper.accessor('eyeColor', {
-    //   header: 'Eye Color',
-    //   // footer: info => info.column.id,
-    // }),
-    
-    // columnHelper.accessor('gender', {
-    //   header: 'Gender',
-    //   // footer: info => info.column.id,
-    // }),
-    // columnHelper.accessor('company', {
-    //   header: 'Company',
-    //   // footer: info => info.column.id,
-    // }),  
-    // columnHelper.accessor('address', {
-    //   header: 'Address',
-    //   // footer: info => info.column.id,
-    // }),
-    // columnHelper.accessor('about', {
-    //   header: 'About',
-    //   // footer: info => info.column.id,
-    // }),
-    // columnHelper.accessor('last_contact_date', {
-    //   header: 'Last Contact Date',
-    //   // footer: info => info.column.id,
-    // }),
-    {
-      id: 'actions',
-      header: 'Actions',
-      cell: ({ row }) => (
-        <Link to={`/contacts/${row.original.name}`}>View Details</Link>
-      ),
-    },
+    columnHelper.accessor('name', {header: 'Name', cell: info => <Link to={`/contact/${info.row.original.name}`}>{info.getValue()}</Link> }), // Add link to contact details
+    columnHelper.accessor('phone', {header: 'Phone'}),
+    columnHelper.accessor('age', {header: 'Age'}),
+    columnHelper.accessor('email', {header: 'Email'}),
+    columnHelper.accessor('picture', {header: 'Picture', cell: info => <img src={info.getValue()} alt="Contact" style={{ width: '100px' }}/>,}),
   ];
 
 
@@ -111,7 +59,6 @@ const App: React.FC = () => {
   return (
     <div>
       <h1>Contacts</h1>
-      {/* <Outlet /> */}
       <table>
         <thead>
           {table.getHeaderGroups().map(headerGroup => (

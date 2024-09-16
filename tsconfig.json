@@ -1,22 +1,3 @@
-// {
-//   "compilerOptions": {
-//     "target": "ES2020",
-//     "module": "ESNext",
-//     "moduleResolution": "node",
-//     "lib": ["ES2020", "DOM"],
-//     "allowImportingTsExtensions": true,
-//     "resolveJsonModule": true,
-//     "noEmit": true,
-//     "jsx": "react-jsx",
-//     "strict": true,
-//     "noUnusedLocals": true,
-//     "noUnusedParameters": true,
-//     "noFallthroughCasesInSwitch": true,
-//     "allowSyntheticDefaultImports": true
-//   },
-//   "include": ["src", "index.ts"]
-// }
-
 {
   "compilerOptions": {
     "target": "ES2020",
