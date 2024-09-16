@@ -1,22 +1,23 @@
 import React from 'react'
 import { useParams } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
+import Contact from '../App';
 
 // Define a type for Contact
-type Contact = {
-  isActive: boolean;
-  picture: string;
-  age: number;
-  eyeColor: string;
-  name: string;
-  gender: string;
-  company: string;
-  email: string;
-  phone: string;
-  address: string;
-  about: string;
-  last_contact_date: string;
-};
+// type Contact = {
+//   isActive: boolean;
+//   picture: string;
+//   age: number;
+//   eyeColor: string;
+//   name: string;
+//   gender: string;
+//   company: string;
+//   email: string;
+//   phone: string;
+//   address: string;
+//   about: string;
+//   last_contact_date: string;
+// };
 
 const fetchContactByName = async (name: string) => {
   const response = await fetch(`/contacts/${name}`);
@@ -27,6 +28,7 @@ const fetchContactByName = async (name: string) => {
 }
 
 const FocusPage = () => {
+  console.log('FocusPage');
   // const { name } = useParams();
   // const { data: contact, error, isLoading } = useQuery(['contact', name], () => fetchContactByName(name));
   const { name } = useParams({ strict: false });
@@ -52,7 +54,7 @@ const FocusPage = () => {
       <p><strong>Gender:</strong> {contact.gender}</p>
       <p><strong>Eye Color:</strong> {contact.eyeColor}</p>
       <p><strong>Age:</strong> {contact.age}</p>
-      <p><strong>Active:</strong> {contact.isActive ? 'Yes' : 'No'}</p>
+      <p><strong>Active:</strong> {contact.isActive}</p>
       <p><strong>Last Contact Date:</strong> {contact.last_contact_date}</p>
       {/* Add more fields as necessary */}
     </div>

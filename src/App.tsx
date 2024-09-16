@@ -2,6 +2,7 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { Link } from '@tanstack/react-router';
+import { Outlet } from '@tanstack/react-router';
 
 // Define your Contact type and other constants
 type Contact = {
@@ -110,6 +111,7 @@ const App: React.FC = () => {
   return (
     <div>
       <h1>Contacts</h1>
+      {/* <Outlet /> */}
       <table>
         <thead>
           {table.getHeaderGroups().map(headerGroup => (
