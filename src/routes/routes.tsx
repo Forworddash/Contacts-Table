@@ -2,8 +2,6 @@ import { createRouter, createRootRoute, createRoute } from '@tanstack/react-rout
 import App from '../App';
 import FocusPage from '../components/focuspage';
 
-
-
 // Define the root route
 const rootRoute = createRootRoute({
   component: App,

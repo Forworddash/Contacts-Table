@@ -18,7 +18,6 @@ type Contact = {
     about: string;
     last_contact_date: string;
   };
-  
 
 // Fetch contacts from API
 const fetchContacts = async () => {
