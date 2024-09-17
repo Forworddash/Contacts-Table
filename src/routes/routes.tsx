@@ -1,6 +1,6 @@
 import { createRouter, createRootRoute, createRoute } from '@tanstack/react-router';
 import App from '../App';
-import FocusPage from '../components/focuspage';
+import ContactDetails from '../components/contactdetails';
 
 // Define the root route
 const rootRoute = createRootRoute({
@@ -11,7 +11,7 @@ const rootRoute = createRootRoute({
 const contactDetailRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/contacts/:name',
-  component: FocusPage,
+  component: ContactDetails,
 });
 
 

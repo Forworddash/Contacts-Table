@@ -48,8 +48,8 @@ const columns = [
   columnHelper.accessor('last_contact_date', {header: 'Last Contact Date'}),
 ];
 
-const FocusPage: React.FC = () => {
-  console.log('FocusPage');
+const ContactDetails: React.FC = () => {
+  console.log('ContactDetails');
   // const { data: contact, error, isLoading } = useQuery(['contact', name], () => fetchContactByName(name));
   const { name } = useParams({ strict: false });
   // const { name } = useParams({ from: '/contacts/${name}' });
@@ -108,4 +108,4 @@ const FocusPage: React.FC = () => {
 }
 
 
-export default FocusPage;
+export default ContactDetails;
