@@ -116,17 +116,38 @@ const ContactDetail: React.FC = () => {
 
   const contact: Contact = data;
 
+  const detailColumns = [
+    { label: 'Picture', value: <img src={contact.picture} alt="Contact" style={{ width: '100px' }} /> },
+    { label: 'Name', value: contact.name },
+    { label: 'Age', value: contact.age },
+    { label: 'Email', value: contact.email },
+    { label: 'Phone', value: contact.phone },
+    { label: 'Address', value: contact.address },
+    { label: 'Company', value: contact.company },
+    { label: 'About', value: contact.about },
+    { label: 'Last Contact Date', value: contact.last_contact_date },
+  ];
+
+
   return (
     <div>
       <h1>Contact Details for {contact.name}</h1>
-      <img src={contact.picture} alt="Contact" style={{ width: '200px' }} />
-      <p><strong>Age:</strong> {contact.age}</p>
-      <p><strong>Email:</strong> {contact.email}</p>
-      <p><strong>Phone:</strong> {contact.phone}</p>
-      <p><strong>Address:</strong> {contact.address}</p>
-      <p><strong>Company:</strong> {contact.company}</p>
-      <p><strong>About:</strong> {contact.about}</p>
-      <p><strong>Last Contact Date:</strong> {contact.last_contact_date}</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Detail</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          {detailColumns.map((detail, index) => (
+            <tr key={index}>
+              <td><strong>{detail.label}</strong></td>
+              <td>{detail.value}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
