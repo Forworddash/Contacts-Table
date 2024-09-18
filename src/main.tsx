@@ -4,10 +4,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import './index.css';
 import { RouterProvider } from '@tanstack/react-router';
 import router from './routes/routes';
-// import App from './App';
-// import ContactDetails from './components/contactdetails';
 
-// Initialize the QueryClient for TanStack Query
+// initialize the QueryClient for TanStack Query
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(

@@ -1,11 +1,8 @@
-import React from 'react'
-import { useParams } from '@tanstack/react-router';
+// ContactDetails.tsx
+import React from 'react';
+import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import Contact from '../App';
-import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 
-
-// Define a type for Contact
 type Contact = {
   isActive: boolean;
   picture: string;
@@ -21,91 +18,59 @@ type Contact = {
   last_contact_date: string;
 };
 
-const fetchContactByName = async (name: string) => {
-  const encodedName = encodeURIComponent(name);
-  const response = await fetch(`/contacts/${encodedName}`);
-  if (!response.ok) {
-    throw new Error('Failed to fetch contact');
-  }
-  return response.json();
-}
-
-const columnHelper = createColumnHelper<Contact>();
-
-// Define columns
-const columns = [
-  columnHelper.accessor('name', {header: 'Name'}),
-  columnHelper.accessor('email', {header: 'Email'}),
-  columnHelper.accessor('phone', {header: 'Phone'}),
-  columnHelper.accessor('address', {header: 'Address'}),
-  columnHelper.accessor('company', {header: 'Company'}),
-  columnHelper.accessor('about', {header: 'About'}),
-  columnHelper.accessor('picture', { header: 'Picture', cell: info => <img src={info.getValue()} alt="Contact" style={{ width: '100px' }} />}),
-  columnHelper.accessor('gender', {header: 'Gender'}),
-  columnHelper.accessor('eyeColor', {header: 'Eye Color'}),
-  columnHelper.accessor('age', {header: 'Age'}),
-  columnHelper.accessor('isActive', {header: 'Active', cell: info => info.getValue() ? 'Yes' : 'No'}),
-  columnHelper.accessor('last_contact_date', {header: 'Last Contact Date'}),
-];
-
-const ContactDetails: React.FC = () => {
-  console.log('ContactDetails');
-  // const { data: contact, error, isLoading } = useQuery(['contact', name], () => fetchContactByName(name));
-  const { name } = useParams({ strict: false });
-  // const { name } = useParams({ from: '/contacts/${name}' });
-  
-  const { data: contact, error, isLoading } = useQuery({
+const ContactDetail: React.FC = () => {
+  const { name } = useParams<{ name: string }>();
+  const { data, error, isLoading } = useQuery({
     queryKey: ['contact', name],
-    queryFn: () => fetchContactByName(name || ''),
-    enabled: !!name,
-  })
-
-  console.log('fetched contact', contact);
+    queryFn: async () => {
+      const response = await fetch(`/contacts?name=${name}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch contact');
+      }
+      const contacts = await response.json();
+      return contacts.find((contact: Contact) => contact.name === name);
+    },
+  });
 
   if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: Failed to fetch contact</div>;
-  
-  // Create table instance
-  const table = useReactTable({
-    data: contact ? [contact] : [], // Wrap contact in array for single row
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
+  if (error instanceof Error) return <div>Error: {error.message}</div>;
+  if (!data) return <div>No contact found</div>;
+
+  const contact: Contact = data;
+
+  const detailColumns = [
+    { label: 'Picture', value: <img src={contact.picture} alt="Contact" style={{ width: '100px' }} /> },
+    { label: 'Name', value: contact.name },
+    { label: 'Age', value: contact.age },
+    { label: 'Email', value: contact.email },
+    { label: 'Phone', value: contact.phone },
+    { label: 'Address', value: contact.address },
+    { label: 'Company', value: contact.company },
+    { label: 'About', value: contact.about },
+    { label: 'Last Contact Date', value: contact.last_contact_date },
+  ];
 
   return (
     <div>
-      <h1>Contact Details</h1>
-      {contact ? (
-        <table>
-          <thead>
-            {table.getHeaderGroups().map(headerGroup => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map(header => (
-                  <th key={header.id}>
-                    {flexRender(header.column.columnDef.header, header.getContext())}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody>
-            {table.getRowModel().rows.map(row => (
-              <tr key={row.id}>
-                {row.getVisibleCells().map(cell => (
-                  <td key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <div>No contact found</div>
-      )}
+      <h1>Contact Details for {contact.name}</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Detail</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          {detailColumns.map((detail, index) => (
+            <tr key={index}>
+              <td><strong>{detail.label}</strong></td>
+              <td>{detail.value}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
-}
+};
 
-
-export default ContactDetails;
+export default ContactDetail;
