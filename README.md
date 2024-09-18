@@ -1,5 +1,3 @@
-# Typescript Contact app
-
 # Installation
 Clone the Repository
 
