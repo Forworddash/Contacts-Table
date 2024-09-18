@@ -1,4 +1,4 @@
-# Instructions
+# Typescript Contact app
 
 To run in Docker:
 - `docker-compose up --build`
