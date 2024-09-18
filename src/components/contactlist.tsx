@@ -29,6 +29,7 @@ const fetchContacts = async () => {
   return response.json();
 };
 
+
 // Define column helper
 const columnHelper = createColumnHelper<Contact>();
 
@@ -53,20 +54,21 @@ const columns = [
 ];
 
 const ContactList: React.FC = () => {
-  const { data, error, isLoading } = useQuery({
+    const { data, error, isLoading } = useQuery({
     queryKey: ['contacts'],
     queryFn: fetchContacts,
   });
 
+
   const [globalFilter, setGlobalFilter] = useState('');
-  const [columnFilters, setColumnFilters] = useState([]);
+//   const [columnFilters, setColumnFilters] = useState([]);
 
   const table = useReactTable({
     data: data || [],
     columns,
     state: {
       globalFilter,
-      columnFilters,
+    //   columnFilters,
     },
     onGlobalFilterChange: setGlobalFilter,
     // onColumnFiltersChange: setColumnFilters,
