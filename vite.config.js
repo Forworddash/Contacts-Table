@@ -15,7 +15,7 @@ export default defineConfig({
   ],
   server: {
     proxy: {
-      '/contacts': 'http://localhost:3000', // Proxy API requests to backend
+      '/contacts': 'http://backend:3000', // Proxy API requests to backend
     },
   },
 });

@@ -1,20 +1,30 @@
 version: '3.8'
 
 services:
-  api:
+  backend:
     build:
       context: .
-      dockerfile: Dockerfile.api
+      dockerfile: Dockerfile.backend
     ports:
-      - "3000:3000"
-    environment:
-      NODE_ENV: production
+      - "3000:3000"  # Exposing backend on port 3000
+    volumes:
+      - .:/app
+    networks:
+      - app-network
 
-  main:
+  frontend:
     build:
       context: .
-      dockerfile: Dockerfile.main
+      dockerfile: Dockerfile.frontend
     ports:
-      - "4000:3000" # Change the port if necessary
+      - "5173:5173"  # Exposing frontend on port 5173
+    volumes:
+      - .:/app
+    networks:
+      - app-network
     environment:
-      NODE_ENV: production
+      VITE_API_URL: http://backend:3000  # Connect frontend to backend API
+
+networks:
+  app-network:
+    driver: bridge
