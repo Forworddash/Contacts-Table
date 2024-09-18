@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { createColumnHelper, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { createColumnHelper, flexRender, getCoreRowModel, useReactTable, getFilteredRowModel } from '@tanstack/react-table';
 
 // Define your Contact type
 type Contact = {
@@ -40,10 +40,11 @@ const columns = [
         {info.getValue()}
       </Link>
     ),
+    filterFn: 'includesString',
   }),
-  columnHelper.accessor('phone', { header: 'Phone' }),
-  columnHelper.accessor('age', { header: 'Age' }),
-  columnHelper.accessor('email', { header: 'Email' }),
+  columnHelper.accessor('phone', { header: 'Phone', filterFn: 'includesString' }),
+  columnHelper.accessor('age', { header: 'Age', filterFn: 'equals' }),
+  columnHelper.accessor('email', { header: 'Email', filterFn: 'includesString' }),
   columnHelper.accessor('picture', {
     header: 'Picture',
     cell: info => <img src={info.getValue()} alt="Contact" style={{ width: '100px' }} />,
@@ -56,10 +57,20 @@ const ContactList: React.FC = () => {
     queryFn: fetchContacts,
   });
 
+  const [globalFilter, setGlobalFilter] = useState('');
+  const [columnFilters, setColumnFilters] = useState([]);
+
   const table = useReactTable({
     data: data || [],
     columns,
+    state: {
+      globalFilter,
+      columnFilters,
+    },
+    onGlobalFilterChange: setGlobalFilter,
+    // onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(), // Add filtering capabilities
   });
 
   if (isLoading) return <div>Loading...</div>;
@@ -68,6 +79,14 @@ const ContactList: React.FC = () => {
   return (
     <div>
       <h1>Contacts</h1>
+
+      <input
+        value={globalFilter ?? ''}
+        onChange={e => setGlobalFilter(e.target.value)}
+        placeholder="Search all columns..."
+        style={{ marginBottom: '20px', padding: '5px', width: '300px' }}
+      />
+
       <table>
         <thead>
           {table.getHeaderGroups().map(headerGroup => (
